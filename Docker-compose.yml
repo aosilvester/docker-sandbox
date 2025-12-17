@@ -1,0 +1,31 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,dynamodb,lambda,sqs,sns
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data
+    volumes:
+      - localstack-data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+
+  app:
+    build: .
+    container_name: demo-app
+    depends_on:
+      - localstack
+    volumes:
+      - ./app:/app
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+    tty: true      
+    stdin_open: true 
+volumes:
+  localstack-data:
