@@ -29,6 +29,8 @@ resource "aws_s3_bucket" "my_bucket" {
 resource "null_resource" "zip_lambda" {
   triggers = {
     lambda_src = filemd5("../lambda/my_lambda/lambda_function.py")
+    lambda_reqs = filemd5("../lambda/my_lambda/requirements.txt")
+
   }
 
   provisioner "local-exec" {
