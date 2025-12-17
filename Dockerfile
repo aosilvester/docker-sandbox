@@ -1,8 +1,8 @@
 FROM python:3.12-slim
 
-# Install bash, curl, unzip, less, groff, jq, git
+# Install bash, curl, unzip, zip, less, groff, jq, git
 RUN apt-get update && \
-    apt-get install -y bash curl unzip less groff jq git && \
+    apt-get install -y bash curl unzip zip less groff jq git && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -10,6 +10,8 @@ WORKDIR /app
 # Install Python dependencies
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+
 
 # Install AWS CLI v2
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip" && \
